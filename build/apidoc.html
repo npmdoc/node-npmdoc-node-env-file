@@ -1,0 +1,255 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/grimen/node-env-file"
+
+    >node-env-file (v0.1.8)</a>
+</h1>
+<h4>Parse and load environment files (containing ENV variable exports) into Node.js environment, i.e. `process.env`.</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.node-env-file">module node-env-file</a><ol>
+
+        <li>
+
+            <span class="apidocSignatureSpan">boolean <span class="apidocSignatureSpan">node-env-file.</span>log</span>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">boolean <span class="apidocSignatureSpan">node-env-file.</span>overwrite</span>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">boolean <span class="apidocSignatureSpan">node-env-file.</span>raise</span>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.node-env-file.sync">
+            function <span class="apidocSignatureSpan">node-env-file.</span>sync
+            <span class="apidocSignatureSpan">(env_file, options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">node-env-file.</span>data</span>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">node-env-file.</span>logger</span>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.node-env-file" id="apidoc.module.node-env-file">module node-env-file</a></h1>
+
+
+
+
+
+
+
+
+    <h2>
+        <a href="#apidoc.element.node-env-file.sync" id="apidoc.element.node-env-file.sync">
+        function <span class="apidocSignatureSpan">node-env-file.</span>sync
+        <span class="apidocSignatureSpan">(env_file, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">sync = function (env_file, options) {
+    options = options || {}
+
+    if (typeof options.verbose === &#x27;undefined&#x27;) {
+        options.verbose = module.exports.verbose
+    }
+
+    if (typeof options.overwrite === &#x27;undefined&#x27;) {
+        options.overwrite = module.exports.overwrite
+    }
+
+    if (typeof options.raise === &#x27;undefined&#x27;) {
+        options.raise = module.exports.raise
+    }
+
+    module.exports.logger = options.logger || module.exports.logger
+
+    if (typeof env_file !== &#x27;string&#x27;) {
+        if (options.raise) {
+            throw new TypeError(&#x22;Environment file argument is not a valid `String`: &#x22; + env_file)
+        } else {
+            if (options.verbose &#x26;&#x26; module.exports.logger) {
+                module.exports.logger.error(&#x27;[ENV]: ERROR Environment file argument is not a valid `String`:&#x27;, process.env.ENV_FILE
+)
+            }
+            return {}
+        }
+    }
+
+    try {
+        env_file = process.env.ENV_FILE = path.resolve(env_file) || process.env.ENV_FILE
+    } catch (err) {
+        if (options.raise) {
+            throw new TypeError(&#x22;Environment file path could not be resolved: &#x22; + err)
+        } else {
+            if (options.verbose &#x26;&#x26; module.exports.logger) {
+                module.exports.logger.error(&#x27;[ENV]: ERROR Environment file path could not be resolved:&#x27;, process.env.ENV_FILE)
+            }
+            return {}
+        }
+    }
+
+    module.exports.data = module.exports.data || {}
+    module.exports.data[env_file] = {}
+
+    if (options.verbose &#x26;&#x26; module.exports.logger) {
+        module.exports.logger.info(&#x27;[ENV]: Loading environment:&#x27;, env_file)
+    }
+
+    if (fs.existsSync(env_file)) {
+        var lines
+
+        try {
+            lines = (fs.readFileSync(env_file, &#x27;utf8&#x27;) || &#x27;&#x27;)
+                .split(/\r?\n|\r/)
+                .filter(function (line) {
+                    return /\s*=\s*/i.test(line)
+                })
+                .map(function (line) {
+                    return line.replace(&#x27;exports &#x27;, &#x27;&#x27;)
+                })
+
+        } catch (err) {
+            if (options.raise) {
+                throw new TypeError(&#x22;Environment file could not be read: &#x22; + err)
+            } else {
+                if (options.verbose &#x26;&#x26; module.exports.logger) {
+                    module.exports.logger.error(&#x27;[ENV]: ERROR Environment file could not be read:&#x27;, env_file)
+                }
+                return {}
+            }
+        }
+
+        module.exports.lines = module.exports
+        module.exports.lines.comments = []
+        module.exports.lines.variables = []
+
+        var is_comment
+
+        lines.forEach(function(line) {
+            is_comment = /^\s*\#/i.test(line) // ignore comment lines (starting with #).
+
+            if (is_comment) {
+                module.exports.lines.comments.push(line)
+
+                if (options.verbose &#x26;&#x26; module.exports.logger) {
+                    module.exports.logger.info(&#x27;[ENV]: Ignored line:&#x27;, line)
+                }
+
+            } else {
+                module.exports.lines.variables.push(line)
+
+                var key_value = line.match(/^([^=]+)\s*=\s*(.*)$/)
+
+                var env_key = key_value[1]
+
+                // remove &#x27; and &#x22; characters if right side of = is quoted
+                var env_value = key_value[2].match(/^([&#x27;&#x22;]?)([^\n]*)\1$/m)[2]
+
+                // overwrite already defined `process.env.*` values?
+                if (!!options.overwrite) {
+                    module.exports.data[env_file][env_key] = env_value
+
+                    if (options.verbose &#x26;&#x26; module.exports.logger &#x26;&#x26; module.exports.data[env_file][env_key] !== env_value) {
+                        module.exports.logger.info(&#x27;[ENV]: Overwritten &#x27;, module.exports.data[env_file][env_key], &#x27; =&#x3e; &#x27;, env_value
+)
+                    }
+
+                } else {
+                    module.exports.data[env_file][env_key] = process.env[env_key] || env_value
+                }
+
+                process.env[env_key] = module.exports.data[env_file][env_key]
+
+                if (options.verbose &#x26;&#x26; module.exports.logger) {
+                    module.exports.logger.info(&#x27;[ENV]:&#x27;, module.exports.data[en ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
