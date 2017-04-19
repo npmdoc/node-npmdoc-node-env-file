@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/grimen/node-env-file"
-
-    >node-env-file (v0.1.8)</a>
+    <a href="https://github.com/grimen/node-env-file">node-env-file (v0.1.8)</a>
 </h1>
 <h4>Parse and load environment files (containing ENV variable exports) into Node.js environment, i.e. `process.env`.</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.node-env-file">module node-env-file</a><ol>
 
@@ -176,26 +169,26 @@
     <li>description and source-code<pre class="apidocCodePre">node-env-file = function (env_file, options) {
     options = options || {}
 
-    if (typeof options.verbose === &#x27;undefined&#x27;) {
+    if (typeof options.verbose === 'undefined') {
         options.verbose = module.exports.verbose
     }
 
-    if (typeof options.overwrite === &#x27;undefined&#x27;) {
+    if (typeof options.overwrite === 'undefined') {
         options.overwrite = module.exports.overwrite
     }
 
-    if (typeof options.raise === &#x27;undefined&#x27;) {
+    if (typeof options.raise === 'undefined') {
         options.raise = module.exports.raise
     }
 
     module.exports.logger = options.logger || module.exports.logger
 
-    if (typeof env_file !== &#x27;string&#x27;) {
+    if (typeof env_file !== 'string') {
         if (options.raise) {
-            throw new TypeError(&#x22;Environment file argument is not a valid `String`: &#x22; + env_file)
+            throw new TypeError("Environment file argument is not a valid `String`: " + env_file)
         } else {
-            if (options.verbose &#x26;&#x26; module.exports.logger) {
-                module.exports.logger.error(&#x27;[ENV]: ERROR Environment file argument is not a valid `String`:&#x27;, process.env.ENV_FILE
+            if (options.verbose &amp;&amp; module.exports.logger) {
+                module.exports.logger.error('[ENV]: ERROR Environment file argument is not a valid `String`:', process.env.ENV_FILE
 )
             }
             return {}
@@ -206,10 +199,10 @@
         env_file = process.env.ENV_FILE = path.resolve(env_file) || process.env.ENV_FILE
     } catch (err) {
         if (options.raise) {
-            throw new TypeError(&#x22;Environment file path could not be resolved: &#x22; + err)
+            throw new TypeError("Environment file path could not be resolved: " + err)
         } else {
-            if (options.verbose &#x26;&#x26; module.exports.logger) {
-                module.exports.logger.error(&#x27;[ENV]: ERROR Environment file path could not be resolved:&#x27;, process.env.ENV_FILE)
+            if (options.verbose &amp;&amp; module.exports.logger) {
+                module.exports.logger.error('[ENV]: ERROR Environment file path could not be resolved:', process.env.ENV_FILE)
             }
             return {}
         }
@@ -218,29 +211,29 @@
     module.exports.data = module.exports.data || {}
     module.exports.data[env_file] = {}
 
-    if (options.verbose &#x26;&#x26; module.exports.logger) {
-        module.exports.logger.info(&#x27;[ENV]: Loading environment:&#x27;, env_file)
+    if (options.verbose &amp;&amp; module.exports.logger) {
+        module.exports.logger.info('[ENV]: Loading environment:', env_file)
     }
 
     if (fs.existsSync(env_file)) {
         var lines
 
         try {
-            lines = (fs.readFileSync(env_file, &#x27;utf8&#x27;) || &#x27;&#x27;)
+            lines = (fs.readFileSync(env_file, 'utf8') || '')
                 .split(/\r?\n|\r/)
                 .filter(function (line) {
                     return /\s*=\s*/i.test(line)
                 })
                 .map(function (line) {
-                    return line.replace(&#x27;exports &#x27;, &#x27;&#x27;)
+                    return line.replace('exports ', '')
                 })
 
         } catch (err) {
             if (options.raise) {
-                throw new TypeError(&#x22;Environment file could not be read: &#x22; + err)
+                throw new TypeError("Environment file could not be read: " + err)
             } else {
-                if (options.verbose &#x26;&#x26; module.exports.logger) {
-                    module.exports.logger.error(&#x27;[ENV]: ERROR Environment file could not be read:&#x27;, env_file)
+                if (options.verbose &amp;&amp; module.exports.logger) {
+                    module.exports.logger.error('[ENV]: ERROR Environment file could not be read:', env_file)
                 }
                 return {}
             }
@@ -258,8 +251,8 @@
             if (is_comment) {
                 module.exports.lines.comments.push(line)
 
-                if (options.verbose &#x26;&#x26; module.exports.logger) {
-                    module.exports.logger.info(&#x27;[ENV]: Ignored line:&#x27;, line)
+                if (options.verbose &amp;&amp; module.exports.logger) {
+                    module.exports.logger.info('[ENV]: Ignored line:', line)
                 }
 
             } else {
@@ -269,15 +262,15 @@
 
                 var env_key = key_value[1]
 
-                // remove &#x27; and &#x22; characters if right side of = is quoted
-                var env_value = key_value[2].match(/^([&#x27;&#x22;]?)([^\n]*)\1$/m)[2]
+                // remove ' and " characters if right side of = is quoted
+                var env_value = key_value[2].match(/^(['"]?)([^\n]*)\1$/m)[2]
 
                 // overwrite already defined `process.env.*` values?
                 if (!!options.overwrite) {
                     module.exports.data[env_file][env_key] = env_value
 
-                    if (options.verbose &#x26;&#x26; module.exports.logger &#x26;&#x26; module.exports.data[env_file][env_key] !== env_value) {
-                        module.exports.logger.info(&#x27;[ENV]: Overwritten &#x27;, module.exports.data[env_file][env_key], &#x27; =&#x3e; &#x27;, env_value
+                    if (options.verbose &amp;&amp; module.exports.logger &amp;&amp; module.exports.data[env_file][env_key] !== env_value) {
+                        module.exports.logger.info('[ENV]: Overwritten ', module.exports.data[env_file][env_key], ' =&gt; ', env_value
 )
                     }
 
@@ -287,8 +280,8 @@
 
                 process.env[env_key] = module.exports.data[env_file][env_key]
 
-                if (options.verbose &#x26;&#x26; module.exports.logger) {
-                    module.exports.logger.info(&#x27;[ENV]:&#x27;, module.exports.data[en ...</pre></li>
+                if (options.verbose &amp;&amp; module.exports.logger) {
+                    module.exports.logger.info('[ENV]:', module.exports.data[en ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -304,26 +297,26 @@
     <li>description and source-code<pre class="apidocCodePre">sync = function (env_file, options) {
     options = options || {}
 
-    if (typeof options.verbose === &#x27;undefined&#x27;) {
+    if (typeof options.verbose === 'undefined') {
         options.verbose = module.exports.verbose
     }
 
-    if (typeof options.overwrite === &#x27;undefined&#x27;) {
+    if (typeof options.overwrite === 'undefined') {
         options.overwrite = module.exports.overwrite
     }
 
-    if (typeof options.raise === &#x27;undefined&#x27;) {
+    if (typeof options.raise === 'undefined') {
         options.raise = module.exports.raise
     }
 
     module.exports.logger = options.logger || module.exports.logger
 
-    if (typeof env_file !== &#x27;string&#x27;) {
+    if (typeof env_file !== 'string') {
         if (options.raise) {
-            throw new TypeError(&#x22;Environment file argument is not a valid `String`: &#x22; + env_file)
+            throw new TypeError("Environment file argument is not a valid `String`: " + env_file)
         } else {
-            if (options.verbose &#x26;&#x26; module.exports.logger) {
-                module.exports.logger.error(&#x27;[ENV]: ERROR Environment file argument is not a valid `String`:&#x27;, process.env.ENV_FILE
+            if (options.verbose &amp;&amp; module.exports.logger) {
+                module.exports.logger.error('[ENV]: ERROR Environment file argument is not a valid `String`:', process.env.ENV_FILE
 )
             }
             return {}
@@ -334,10 +327,10 @@
         env_file = process.env.ENV_FILE = path.resolve(env_file) || process.env.ENV_FILE
     } catch (err) {
         if (options.raise) {
-            throw new TypeError(&#x22;Environment file path could not be resolved: &#x22; + err)
+            throw new TypeError("Environment file path could not be resolved: " + err)
         } else {
-            if (options.verbose &#x26;&#x26; module.exports.logger) {
-                module.exports.logger.error(&#x27;[ENV]: ERROR Environment file path could not be resolved:&#x27;, process.env.ENV_FILE)
+            if (options.verbose &amp;&amp; module.exports.logger) {
+                module.exports.logger.error('[ENV]: ERROR Environment file path could not be resolved:', process.env.ENV_FILE)
             }
             return {}
         }
@@ -346,29 +339,29 @@
     module.exports.data = module.exports.data || {}
     module.exports.data[env_file] = {}
 
-    if (options.verbose &#x26;&#x26; module.exports.logger) {
-        module.exports.logger.info(&#x27;[ENV]: Loading environment:&#x27;, env_file)
+    if (options.verbose &amp;&amp; module.exports.logger) {
+        module.exports.logger.info('[ENV]: Loading environment:', env_file)
     }
 
     if (fs.existsSync(env_file)) {
         var lines
 
         try {
-            lines = (fs.readFileSync(env_file, &#x27;utf8&#x27;) || &#x27;&#x27;)
+            lines = (fs.readFileSync(env_file, 'utf8') || '')
                 .split(/\r?\n|\r/)
                 .filter(function (line) {
                     return /\s*=\s*/i.test(line)
                 })
                 .map(function (line) {
-                    return line.replace(&#x27;exports &#x27;, &#x27;&#x27;)
+                    return line.replace('exports ', '')
                 })
 
         } catch (err) {
             if (options.raise) {
-                throw new TypeError(&#x22;Environment file could not be read: &#x22; + err)
+                throw new TypeError("Environment file could not be read: " + err)
             } else {
-                if (options.verbose &#x26;&#x26; module.exports.logger) {
-                    module.exports.logger.error(&#x27;[ENV]: ERROR Environment file could not be read:&#x27;, env_file)
+                if (options.verbose &amp;&amp; module.exports.logger) {
+                    module.exports.logger.error('[ENV]: ERROR Environment file could not be read:', env_file)
                 }
                 return {}
             }
@@ -386,8 +379,8 @@
             if (is_comment) {
                 module.exports.lines.comments.push(line)
 
-                if (options.verbose &#x26;&#x26; module.exports.logger) {
-                    module.exports.logger.info(&#x27;[ENV]: Ignored line:&#x27;, line)
+                if (options.verbose &amp;&amp; module.exports.logger) {
+                    module.exports.logger.info('[ENV]: Ignored line:', line)
                 }
 
             } else {
@@ -397,15 +390,15 @@
 
                 var env_key = key_value[1]
 
-                // remove &#x27; and &#x22; characters if right side of = is quoted
-                var env_value = key_value[2].match(/^([&#x27;&#x22;]?)([^\n]*)\1$/m)[2]
+                // remove ' and " characters if right side of = is quoted
+                var env_value = key_value[2].match(/^(['"]?)([^\n]*)\1$/m)[2]
 
                 // overwrite already defined `process.env.*` values?
                 if (!!options.overwrite) {
                     module.exports.data[env_file][env_key] = env_value
 
-                    if (options.verbose &#x26;&#x26; module.exports.logger &#x26;&#x26; module.exports.data[env_file][env_key] !== env_value) {
-                        module.exports.logger.info(&#x27;[ENV]: Overwritten &#x27;, module.exports.data[env_file][env_key], &#x27; =&#x3e; &#x27;, env_value
+                    if (options.verbose &amp;&amp; module.exports.logger &amp;&amp; module.exports.data[env_file][env_key] !== env_value) {
+                        module.exports.logger.info('[ENV]: Overwritten ', module.exports.data[env_file][env_key], ' =&gt; ', env_value
 )
                     }
 
@@ -415,8 +408,8 @@
 
                 process.env[env_key] = module.exports.data[env_file][env_key]
 
-                if (options.verbose &#x26;&#x26; module.exports.logger) {
-                    module.exports.logger.info(&#x27;[ENV]:&#x27;, module.exports.data[en ...</pre></li>
+                if (options.verbose &amp;&amp; module.exports.logger) {
+                    module.exports.logger.info('[ENV]:', module.exports.data[en ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -447,26 +440,26 @@
     <li>description and source-code<pre class="apidocCodePre">sync = function (env_file, options) {
     options = options || {}
 
-    if (typeof options.verbose === &#x27;undefined&#x27;) {
+    if (typeof options.verbose === 'undefined') {
         options.verbose = module.exports.verbose
     }
 
-    if (typeof options.overwrite === &#x27;undefined&#x27;) {
+    if (typeof options.overwrite === 'undefined') {
         options.overwrite = module.exports.overwrite
     }
 
-    if (typeof options.raise === &#x27;undefined&#x27;) {
+    if (typeof options.raise === 'undefined') {
         options.raise = module.exports.raise
     }
 
     module.exports.logger = options.logger || module.exports.logger
 
-    if (typeof env_file !== &#x27;string&#x27;) {
+    if (typeof env_file !== 'string') {
         if (options.raise) {
-            throw new TypeError(&#x22;Environment file argument is not a valid `String`: &#x22; + env_file)
+            throw new TypeError("Environment file argument is not a valid `String`: " + env_file)
         } else {
-            if (options.verbose &#x26;&#x26; module.exports.logger) {
-                module.exports.logger.error(&#x27;[ENV]: ERROR Environment file argument is not a valid `String`:&#x27;, process.env.ENV_FILE
+            if (options.verbose &amp;&amp; module.exports.logger) {
+                module.exports.logger.error('[ENV]: ERROR Environment file argument is not a valid `String`:', process.env.ENV_FILE
 )
             }
             return {}
@@ -477,10 +470,10 @@
         env_file = process.env.ENV_FILE = path.resolve(env_file) || process.env.ENV_FILE
     } catch (err) {
         if (options.raise) {
-            throw new TypeError(&#x22;Environment file path could not be resolved: &#x22; + err)
+            throw new TypeError("Environment file path could not be resolved: " + err)
         } else {
-            if (options.verbose &#x26;&#x26; module.exports.logger) {
-                module.exports.logger.error(&#x27;[ENV]: ERROR Environment file path could not be resolved:&#x27;, process.env.ENV_FILE)
+            if (options.verbose &amp;&amp; module.exports.logger) {
+                module.exports.logger.error('[ENV]: ERROR Environment file path could not be resolved:', process.env.ENV_FILE)
             }
             return {}
         }
@@ -489,29 +482,29 @@
     module.exports.data = module.exports.data || {}
     module.exports.data[env_file] = {}
 
-    if (options.verbose &#x26;&#x26; module.exports.logger) {
-        module.exports.logger.info(&#x27;[ENV]: Loading environment:&#x27;, env_file)
+    if (options.verbose &amp;&amp; module.exports.logger) {
+        module.exports.logger.info('[ENV]: Loading environment:', env_file)
     }
 
     if (fs.existsSync(env_file)) {
         var lines
 
         try {
-            lines = (fs.readFileSync(env_file, &#x27;utf8&#x27;) || &#x27;&#x27;)
+            lines = (fs.readFileSync(env_file, 'utf8') || '')
                 .split(/\r?\n|\r/)
                 .filter(function (line) {
                     return /\s*=\s*/i.test(line)
                 })
                 .map(function (line) {
-                    return line.replace(&#x27;exports &#x27;, &#x27;&#x27;)
+                    return line.replace('exports ', '')
                 })
 
         } catch (err) {
             if (options.raise) {
-                throw new TypeError(&#x22;Environment file could not be read: &#x22; + err)
+                throw new TypeError("Environment file could not be read: " + err)
             } else {
-                if (options.verbose &#x26;&#x26; module.exports.logger) {
-                    module.exports.logger.error(&#x27;[ENV]: ERROR Environment file could not be read:&#x27;, env_file)
+                if (options.verbose &amp;&amp; module.exports.logger) {
+                    module.exports.logger.error('[ENV]: ERROR Environment file could not be read:', env_file)
                 }
                 return {}
             }
@@ -529,8 +522,8 @@
             if (is_comment) {
                 module.exports.lines.comments.push(line)
 
-                if (options.verbose &#x26;&#x26; module.exports.logger) {
-                    module.exports.logger.info(&#x27;[ENV]: Ignored line:&#x27;, line)
+                if (options.verbose &amp;&amp; module.exports.logger) {
+                    module.exports.logger.info('[ENV]: Ignored line:', line)
                 }
 
             } else {
@@ -540,15 +533,15 @@
 
                 var env_key = key_value[1]
 
-                // remove &#x27; and &#x22; characters if right side of = is quoted
-                var env_value = key_value[2].match(/^([&#x27;&#x22;]?)([^\n]*)\1$/m)[2]
+                // remove ' and " characters if right side of = is quoted
+                var env_value = key_value[2].match(/^(['"]?)([^\n]*)\1$/m)[2]
 
                 // overwrite already defined `process.env.*` values?
                 if (!!options.overwrite) {
                     module.exports.data[env_file][env_key] = env_value
 
-                    if (options.verbose &#x26;&#x26; module.exports.logger &#x26;&#x26; module.exports.data[env_file][env_key] !== env_value) {
-                        module.exports.logger.info(&#x27;[ENV]: Overwritten &#x27;, module.exports.data[env_file][env_key], &#x27; =&#x3e; &#x27;, env_value
+                    if (options.verbose &amp;&amp; module.exports.logger &amp;&amp; module.exports.data[env_file][env_key] !== env_value) {
+                        module.exports.logger.info('[ENV]: Overwritten ', module.exports.data[env_file][env_key], ' =&gt; ', env_value
 )
                     }
 
@@ -558,8 +551,8 @@
 
                 process.env[env_key] = module.exports.data[env_file][env_key]
 
-                if (options.verbose &#x26;&#x26; module.exports.logger) {
-                    module.exports.logger.info(&#x27;[ENV]:&#x27;, module.exports.data[en ...</pre></li>
+                if (options.verbose &amp;&amp; module.exports.logger) {
+                    module.exports.logger.info('[ENV]:', module.exports.data[en ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -576,3 +569,4 @@
     ]
 </div>
 </div>
+</body></html>
