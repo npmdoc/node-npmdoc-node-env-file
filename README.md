@@ -1,6 +1,6 @@
 # npmdoc-node-env-file
 
-#### api documentation for  [node-env-file (v0.1.8)](https://github.com/grimen/node-env-file)  [![npm package](https://img.shields.io/npm/v/npmdoc-node-env-file.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-node-env-file) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-node-env-file.svg)](https://travis-ci.org/npmdoc/node-npmdoc-node-env-file)
+#### basic api documentation for  [node-env-file (v0.1.8)](https://github.com/grimen/node-env-file)  [![npm package](https://img.shields.io/npm/v/npmdoc-node-env-file.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-node-env-file) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-node-env-file.svg)](https://travis-ci.org/npmdoc/node-npmdoc-node-env-file)
 
 #### Parse and load environment files (containing ENV variable exports) into Node.js environment, i.e. `process.env`.
 
